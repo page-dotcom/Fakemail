@@ -106,15 +106,13 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        
-
         <Header />
         
         <main style={{ minHeight: '80vh' }}>
           {children}
         </main>
 
-        {/* --- PENAMBAHAN COOKIE CONSENT (BOOTSTRAP 3 STYLE) --- */}
+        {/* --- COOKIE CONSENT BANNER (TANPA onClick) --- */}
         <div id="cookie-banner" className="alert alert-dark" style={{
           position: 'fixed', 
           bottom: 0, 
@@ -130,18 +128,26 @@ export default function RootLayout({ children }) {
         }}>
           <div className="container text-center">
             <span>This website uses cookies to ensure you get the best experience. </span>
-            <button className="btn btn-primary btn-sm" style={{marginLeft: '10px'}} onClick={() => {
-              localStorage.setItem('cookieAccepted', 'yes');
-              document.getElementById('cookie-banner').style.display = 'none';
-            }}>Got it!</button>
+            {/* ID ditambahkan di sini untuk diakses oleh script di bawah */}
+            <button id="accept-cookie-btn" className="btn btn-primary btn-sm" style={{marginLeft: '10px'}}>Got it!</button>
           </div>
         </div>
 
-        {/* Script untuk kontrol tampilan banner cookie */}
+        {/* Script untuk kontrol tampilan banner dan event klik */}
         <Script id="cookie-logic" strategy="afterInteractive">
           {`
+            // Cek apakah user sudah setuju sebelumnya
             if (!localStorage.getItem('cookieAccepted')) {
               document.getElementById('cookie-banner').style.display = 'block';
+            }
+
+            // Tambahkan event listener ke tombol (menggantikan onClick)
+            var btn = document.getElementById('accept-cookie-btn');
+            if(btn) {
+              btn.addEventListener('click', function() {
+                localStorage.setItem('cookieAccepted', 'yes');
+                document.getElementById('cookie-banner').style.display = 'none';
+              });
             }
           `}
         </Script>
