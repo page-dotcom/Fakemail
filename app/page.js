@@ -88,12 +88,36 @@ export default function Home() {
     setEmails([]); 
   };
 
-  const acakEmail = (domain) => {
-    const randomUser = 'user' + Math.floor(Math.random() * 99999);
-    setUsername(randomUser);
-    const emailBaru = `${randomUser}@${domain}`;
-    simpanKeMemori(emailBaru);
-  };
+  // Fungsi buat bikin string acak yang bisa dibaca (mirip nama)
+const generateFakeName = () => {
+  const consonants = "bcdfghjklmnpqrstvwxyz";
+  const vowels = "aeiou";
+  let name = "";
+  // Bikin panjang nama acak antara 4 sampai 6 huruf
+  let length = Math.floor(Math.random() * 3) + 4; 
+  
+  for (let i = 0; i < length; i++) {
+    if (i % 2 === 0) {
+      name += consonants.charAt(Math.floor(Math.random() * consonants.length));
+    } else {
+      name += vowels.charAt(Math.floor(Math.random() * vowels.length));
+    }
+  }
+  return name;
+};
+
+// Fungsi utama lo yang udah di-update
+const acakEmail = (domain) => {
+  // Bikin nama acak + titik + angka acak (contoh hasil: kamura.8192)
+  const fakeName = generateFakeName();
+  const randomNumber = Math.floor(Math.random() * 99999);
+  
+  const randomUser = `${fakeName}.${randomNumber}`;
+  
+  setUsername(randomUser);
+  const emailBaru = `${randomUser}@${domain}`;
+  simpanKeMemori(emailBaru);
+};
 
   const handleSimpanCustom = () => {
     if (!username) return;
